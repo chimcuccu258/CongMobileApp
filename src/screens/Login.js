@@ -11,8 +11,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../assets/colors';
 import PhoneInput from 'react-native-phone-number-input';
 import {windowWidth} from '../utils/Dimession';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
+  const navigation = useNavigation();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,11 +33,11 @@ const Login = () => {
               setPhone(text);
             }}
           />
-          <TouchableOpacity activeOpacity={0.5} style={styles.buttonLogin}>
+          <TouchableOpacity activeOpacity={0.5} style={styles.buttonLogin} onPress={() => navigation.navigate('Authentication')}>
             <Text style={{color: colors.white}}>Continue</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.5}>
+        <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Tabs')}>
           <Text>Skip</Text>
         </TouchableOpacity>
       </View>
