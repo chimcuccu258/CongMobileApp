@@ -1,22 +1,49 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {colors} from '../assets/colors';
+import PhoneInput from 'react-native-phone-number-input';
+import {windowWidth} from '../utils/Dimession';
 
 const Login = () => {
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* <Text>Login</Text> */}
       <View style={styles.container}>
         <Text>Welcome Back</Text>
-        <View>
-          
+        <Text>Login</Text>
+        <View style={styles.loginBox}>
+          <PhoneInput
+            defaultValue={phone}
+            defaultCode={'VN'}
+            withShadow
+            containerStyle={{width: '100%'}}
+            onChangeFormattedText={text => {
+              setPhone(text);
+            }}
+          />
+          <TouchableOpacity activeOpacity={0.5} style={styles.buttonLogin}>
+            <Text style={{color: colors.white}}>Continue</Text>
+          </TouchableOpacity>
         </View>
+        <TouchableOpacity activeOpacity={0.5}>
+          <Text>Skip</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -25,5 +52,23 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  }
-})
+    alignItems: 'center',
+  },
+  loginBox: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    height: 50,
+    color: colors.black,
+  },
+  buttonLogin: {
+    top: 20,
+    backgroundColor: colors.primary,
+    padding: 20,
+    borderRadius: 30,
+    width: windowWidth - 200,
+    alignItems: 'center',
+  },
+});
