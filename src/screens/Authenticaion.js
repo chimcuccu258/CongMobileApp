@@ -10,9 +10,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import auth from '@react-native-firebase/auth';
 
-const Authentication = () => {
+const Authentication = ({route}) => {
   const navigation = useNavigation();
+  const {phone, confirmation} = route.params;
 
   let textInput = useRef(null);
   let clockCall = null;
@@ -21,6 +23,17 @@ const Authentication = () => {
   const [internalVal, setInternalVal] = useState('');
   const [countdown, setCountdown] = useState(defaultCountdown);
   const [enableResend, setEnableResend] = useState(false);
+
+  const confirmCode = async otpValue => {
+    try {
+      console.log(otpValue);
+      await confirmation.confirm(otpValue);
+      navigation.navigate('Tabs');
+    } catch (error) {
+      console.log('Invalid code.');
+      console.log(otpValue);
+    }
+  };
 
   useEffect(() => {
     clockCall = setInterval(() => {
@@ -44,11 +57,13 @@ const Authentication = () => {
   const onChangeText = val => {
     setInternalVal(val);
     if (val.length === lengthInput) {
-      navigation.navigate('Tabs');
+      console.log('Input Length:', val.length);
+      console.log('Input Value:', val);
+      confirmCode(val);
     }
   };
 
-  const onResendOTP = () => {
+  const onResendOTP = async () => {
     if (enableResend) {
       setCountdown(defaultCountdown);
       setEnableResend(false);
@@ -56,6 +71,12 @@ const Authentication = () => {
       clockCall = setInterval(() => {
         decrementClock();
       }, 1000);
+      try {
+        const newConfirmation = await auth().signInWithPhoneNumber(phone);
+        setConfirm(newConfirmation);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -83,7 +104,6 @@ const Authentication = () => {
             style={{width: 0, height: 0}}
             value={internalVal}
             maxLength={lengthInput}
-            returnKeyType="done"
             keyboardType="numeric"
           />
           <View style={styles.containerInput}>
@@ -171,7 +191,6 @@ const styles = StyleSheet.create({
   bottomView: {
     flexDirection: 'row',
     flex: 1,
-    // justifyContent: 'flex-end',
     marginBottom: 50,
     alignItems: 'flex-end',
   },

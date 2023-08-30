@@ -11,12 +11,24 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../assets/colors';
 import PhoneInput from 'react-native-phone-number-input';
 import {windowWidth} from '../utils/Dimession';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const Login = () => {
   const navigation = useNavigation();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState(null);
+
+  const signInWithPhoneNumber = async phone => {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phone);
+      setConfirm(confirmation);
+      navigation.navigate('Authentication', {phone, confirmation});
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -33,11 +45,16 @@ const Login = () => {
               setPhone(text);
             }}
           />
-          <TouchableOpacity activeOpacity={0.5} style={styles.buttonLogin} onPress={() => navigation.navigate('Authentication')}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.buttonLogin}
+            onPress={() => signInWithPhoneNumber(phone)}>
             <Text style={{color: colors.white}}>Continue</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Tabs')}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate('Tabs')}>
           <Text>Skip</Text>
         </TouchableOpacity>
       </View>

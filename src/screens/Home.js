@@ -8,9 +8,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <TouchableOpacity>
-
-        </TouchableOpacity>
+        <TouchableOpacity></TouchableOpacity>
       </View>
     </SafeAreaView>
   );
