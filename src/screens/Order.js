@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   quantity: {
     backgroundColor: 'white',
     borderRadius: 50,
-    paddingHorizontal: 5,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     alignItems: 'center',
     justifyContent: 'center',
