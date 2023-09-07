@@ -1,3 +1,9 @@
+import {LogBox} from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 import {
   View,
   Text,
@@ -10,6 +16,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth';
 
 const Authentication = ({route}) => {
@@ -26,8 +33,9 @@ const Authentication = ({route}) => {
 
   const confirmCode = async otpValue => {
     try {
-      console.log(otpValue);
+      // console.log(otpValue);
       await confirmation.confirm(otpValue);
+      // console.log(t);
       navigation.navigate('Tabs');
     } catch (error) {
       console.log('Invalid code.');
@@ -88,6 +96,10 @@ const Authentication = ({route}) => {
     textInput.focus();
   }, []);
 
+  const openKeyboard = () => {
+    textInput.focus();
+  };
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -130,6 +142,13 @@ const Authentication = ({route}) => {
               ))}
           </View>
         </View>
+
+        <View style={styles.openKeyboardButtonContainer}>
+          <TouchableOpacity onPress={openKeyboard}>
+            <MaterialIcons name="keyboard" size={30} color="#234DB7" />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.bottomView}>
           <TouchableOpacity activeOpacity={0.5} onPress={onChangeNumber}>
             <View style={styles.btnChangeNumber}>
@@ -216,5 +235,9 @@ const styles = StyleSheet.create({
   textResend: {
     alignItems: 'center',
     fontSize: 15,
+  },
+  openKeyboardButtonContainer: {
+    alignItems: 'center',
+    marginTop: 30,
   },
 });

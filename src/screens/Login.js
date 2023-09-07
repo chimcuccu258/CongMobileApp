@@ -13,6 +13,7 @@ import PhoneInput from 'react-native-phone-number-input';
 import {windowWidth} from '../utils/Dimession';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import { fonts } from '../assets/fonts';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -23,6 +24,7 @@ const Login = () => {
   const signInWithPhoneNumber = async phone => {
     try {
       const confirmation = await auth().signInWithPhoneNumber(phone);
+      console.log(confirmation);
       setConfirm(confirmation);
       navigation.navigate('Authentication', {phone, confirmation});
     } catch (error) {
@@ -33,8 +35,8 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text>Welcome Back</Text>
-        <Text>Login</Text>
+        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.loginTitle}>Enter phone number to login</Text>
         <View style={styles.loginBox}>
           <PhoneInput
             defaultValue={phone}
@@ -90,4 +92,13 @@ const styles = StyleSheet.create({
     width: windowWidth - 200,
     alignItems: 'center',
   },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginTop: 30,
+  },
+  loginTitle: {
+    fontSize: 16,
+    marginTop: 30,
+  }
 });
