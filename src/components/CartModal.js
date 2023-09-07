@@ -64,7 +64,36 @@ const CartModal = ({
                   <Image source={item.image} style={styles.itemImage} />
                   <View style={{justifyContent: 'space-between'}}>
                     <Text style={{fontWeight: 'bold'}}>{item.menuItem}</Text>
-                    <Text>Số lượng: {item.quantity}</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        style={styles.updateCartBtn}
+                        // onPress={() => decreaseItemQuantity(item.menuItem)}
+                      >
+                        <MaterialCommunityIcons
+                          name="minus"
+                          size={18}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                      <Text>{item.quantity}</Text>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        style={styles.updateCartBtn}
+                        // onPress={() => increaseItemQuantity(item.menuItem, item.totalPrice)}
+                      >
+                        <MaterialCommunityIcons
+                          name="plus"
+                          size={18}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
                 <Text>{formatPrice(item.totalPrice)}đ</Text>
@@ -186,5 +215,13 @@ const styles = StyleSheet.create({
       height: 3,
     },
     elevation: 5,
+  },
+  updateCartBtn: {
+    backgroundColor: colors.green1,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
