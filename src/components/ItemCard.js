@@ -39,7 +39,7 @@ const ItemCard = ({id, addToCart}) => {
   }, [id]);
 
   const handleAddToCart = () => {
-    addToCart(menuItem, price);
+    addToCart(menuItem, price, itemImage);
   };
 
   return (

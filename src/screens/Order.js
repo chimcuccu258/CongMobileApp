@@ -64,7 +64,7 @@ const Order = () => {
     setChosenCategory(item);
   };
 
-  const addToCart = (menuItem, price) => {
+  const addToCart = (menuItem, price, image) => {
     const existingItemIndex = cart.findIndex(
       item => item.menuItem === menuItem,
     );
@@ -79,6 +79,7 @@ const Order = () => {
         menuItem,
         quantity: 1,
         totalPrice: price,
+        image,
       };
       setCart([...cart, newItem]);
     }
@@ -97,7 +98,6 @@ const Order = () => {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          // data={categories}
           data={Object.values(categoryMap)}
           style={styles.categoryList}
           keyExtractor={(item, index) => index.toString()}
@@ -149,8 +149,8 @@ const Order = () => {
 
       {showCart && (
         <View style={styles.cart}>
-          <TouchableOpacity 
-            activeOpacity={1} 
+          <TouchableOpacity
+            activeOpacity={1}
             style={{flexDirection: 'row'}}
             onPress={() => setIsCartVisible(true)}>
             <View style={styles.quantity}>
@@ -165,6 +165,9 @@ const Order = () => {
       <CartModal
         visible={isCartVisible}
         onClose={() => setIsCartVisible(false)}
+        cartItems={cart}
+        totalQuantity={totalQuantity}
+        totalPrice={totalPrice}
       />
     </>
   );
@@ -217,8 +220,8 @@ const styles = StyleSheet.create({
   quantity: {
     backgroundColor: 'white',
     borderRadius: 50,
-    width: 20,
-    height: 20,
+    paddingHorizontal: 2,
+    paddingVertical: 2,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 5,
