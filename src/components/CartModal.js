@@ -69,6 +69,7 @@ const CartModal = ({
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        width: windowWidth * 0.2,
                       }}>
                       <TouchableOpacity
                         activeOpacity={1}

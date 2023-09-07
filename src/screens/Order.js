@@ -89,7 +89,6 @@ const Order = () => {
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.totalPrice, 0);
 
-
   return (
     <>
       <View style={styles.container}>
