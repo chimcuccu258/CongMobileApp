@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: colors.green1,
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     borderRadius: 20,
     bottom: 10,
     right: 50,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   quantity: {
     backgroundColor: 'white',
     borderRadius: 50,
-    paddingHorizontal: 2,
+    paddingHorizontal: 5,
     paddingVertical: 2,
     alignItems: 'center',
     justifyContent: 'center',
