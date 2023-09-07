@@ -39,7 +39,6 @@ const ItemCard = ({id, addToCart}) => {
   }, [id]);
 
   const handleAddToCart = () => {
-    // Call the addToCart callback with the selected item's information
     addToCart(menuItem, price);
   };
 

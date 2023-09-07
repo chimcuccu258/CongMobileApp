@@ -9,17 +9,16 @@ const CartModal = ({visible, onClose}) => {
       presentationStyle="formSheet"
       visible={visible}
       onRequestClose={onClose}>
-      <View style={styles.modalContainer}>
+      <View>
+        <View style={styles.modalHeader}>
+          <Text style={{fontSize: 16}}>Xoá</Text> 
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Xác nhận đơn hàng
+          </Text>
+          <MaterialCommunityIcons name="close" size={22} onPress={onClose} />
+        </View>
         <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-          <Text style={{fontSize: 16}}>Xoá</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Xác nhận đơn hàng</Text>
-          <MaterialCommunityIcons name='close' size={22} onPress={onClose} />
-          </View>
-          {/* You can add your cart items and content here */}
-          {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text>Close</Text>
-          </TouchableOpacity> */}
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Sản phẩm đã chọn</Text>
         </View>
       </View>
     </Modal>
@@ -30,17 +29,22 @@ export default CartModal;
 
 const styles = StyleSheet.create({
   modalContainer: {
-    flex: 1,
-    backgroundColor: 'white',
+    // flex: 1,
+    // backgroundColor: 'white',
   },
   modalContent: {
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    width: '100%',
+    // backgroundColor: 'gray',
+    // borderTopLeftRadius: 20,
+    // borderTopRightRadius: 20,
+    marginTop: 20,
+    paddingHorizontal: 20,
+    // width: '100%',
   },
   modalHeader: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-  }
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 0.3,
+  },
 });
