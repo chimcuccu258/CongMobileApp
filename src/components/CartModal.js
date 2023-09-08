@@ -58,6 +58,7 @@ const CartModal = ({
       const orderData = {
         userID: user.uid,
         address: address,
+        
         menuitem: cartItems.map(item => item.menuItem),
         itemPrice: cartItems.map(item => item.totalPrice),
         quantity: cartItems.map(item => item.quantity),

@@ -14,6 +14,8 @@ import {windowWidth} from '../utils/Dimession';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import { fonts } from '../assets/fonts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Login = () => {
   const navigation = useNavigation();
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingVertical: 20,
     alignItems: 'center',
   },
   loginBox: {
