@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {colors} from '../assets/colors';
 
 const History = () => {
   const navigation = useNavigation();
@@ -52,9 +53,7 @@ const History = () => {
       <FlatList
         data={orders}
         keyExtractor={item => item.orderId}
-        renderItem={({item}) => (
-          <View></View>
-        )}
+        renderItem={({item}) => <View></View>}
       />
 
       <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 20}}>
@@ -62,18 +61,30 @@ const History = () => {
       </Text>
       {loading && <Text>Loading...</Text>}
       {!userLoggedIn && (
-        <View style={{marginTop: 20}}>
-          <Text
-            style={styles.noticeText}>
-            Bạn cần đăng nhập để xem lịch sử mua hàng
-          </Text>
+        <View
+          style={{
+            marginTop: 20,
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <Text style={styles.noticeText}>Bạn cần </Text>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => navigation.navigate('Login')}>
+            <Text
+              style={[
+                styles.noticeText,
+                {color: colors.green1, fontWeight: 'bold'},
+              ]}>
+              đăng nhập{' '}
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.noticeText}>để xem lịch sử mua hàng</Text>
         </View>
       )}
       {userLoggedIn && orders.length === 0 && (
         <View style={{marginTop: 20}}>
-          <Text style={styles.noticeText}>
-            Bạn chưa có đơn nào
-          </Text>
+          <Text style={styles.noticeText}>Bạn chưa có đơn nào</Text>
         </View>
       )}
     </View>
@@ -84,6 +95,8 @@ export default History;
 
 const styles = StyleSheet.create({
   noticeText: {
-    fontSize: 13, fontStyle: 'italic', alignSelf: 'center'
-  }
+    fontSize: 13,
+    fontStyle: 'italic',
+    alignSelf: 'center',
+  },
 });

@@ -86,8 +86,45 @@ const Order = () => {
     setShowCart(true);
   };
 
+  const increaseItemQuantity = menuItem => {
+    const existingItemIndex = cart.findIndex(
+      item => item.menuItem === menuItem,
+    );
+    const updatedCart = [...cart];
+    updatedCart[existingItemIndex].quantity++;
+    updatedCart[existingItemIndex].totalPrice +=
+      updatedCart[existingItemIndex].totalPrice /
+      (updatedCart[existingItemIndex].quantity - 1);
+    setCart(updatedCart);
+  };
+
+  const decreaseItemQuantity = menuItem => {
+    const existingItemIndex = cart.findIndex(
+      item => item.menuItem === menuItem,
+    );
+    const updatedCart = [...cart];
+    updatedCart[existingItemIndex].quantity--;
+    updatedCart[existingItemIndex].totalPrice -=
+      updatedCart[existingItemIndex].totalPrice /
+      (updatedCart[existingItemIndex].quantity + 1);
+    if (updatedCart[existingItemIndex].quantity === 0) {
+      updatedCart.splice(existingItemIndex, 1);
+    }
+    setCart(updatedCart);
+    if (updatedCart.length === 0) {
+      setShowCart(false);
+      setIsCartVisible(false);
+    }
+  };
+
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+  const clearCart = () => {
+    setCart([]); 
+    setShowCart(false);
+    setIsCartVisible(false);
+  };
 
   return (
     <>
@@ -165,6 +202,9 @@ const Order = () => {
         cartItems={cart}
         totalQuantity={totalQuantity}
         totalPrice={totalPrice}
+        increaseItemQuantity={increaseItemQuantity}
+        decreaseItemQuantity={decreaseItemQuantity}
+        clearCart={clearCart}
       />
     </>
   );

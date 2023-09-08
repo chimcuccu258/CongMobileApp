@@ -16,7 +16,6 @@ import {windowHeight} from '../utils/Dimession';
 const Home = () => {
   const navigation = useNavigation();
   const [username, setUsername] = useState(null);
-  const [rank, setRank] = useState(null);
 
   useEffect(() => {
     const user = auth().currentUser;

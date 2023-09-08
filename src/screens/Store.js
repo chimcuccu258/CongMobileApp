@@ -19,7 +19,7 @@ const Store = () => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
         <View style={styles.searchBar}>
-          <MaterialCommunityIcons name='magnify' size={26} color={colors.gray} />
+          <MaterialCommunityIcons name='magnify' size={26} />
           <TextInput
             style={styles.searchInput}
             placeholder='Tìm kiếm'
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     height: 45,
     width: windowWidth - 30,
-    borderRadius: 10,
+    borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,

@@ -54,7 +54,10 @@ const ItemCard = ({id, addToCart}) => {
             <Text style={styles.price}>{formatPrice(price)}đ</Text>
           </View>
         </View>
-        <TouchableOpacity activeOpacity={1} style={styles.cardBtn} onPress={handleAddToCart}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.cardBtn}
+          onPress={handleAddToCart}>
           <Text style={{fontSize: 16, color: 'white'}}>+</Text>
         </TouchableOpacity>
       </TouchableOpacity>

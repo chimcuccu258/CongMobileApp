@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Modal,
   TouchableOpacity,
@@ -7,10 +7,15 @@ import {
   Text,
   Image,
   ScrollView,
+  Alert,
+  TextInput,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {windowHeight, windowWidth} from '../utils/Dimession';
 import {colors} from '../assets/colors';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const formatPrice = price => {
   return new Intl.NumberFormat('vi-VN', {
@@ -25,14 +30,81 @@ const CartModal = ({
   cartItems,
   totalQuantity,
   totalPrice,
+  increaseItemQuantity,
+  decreaseItemQuantity,
+  clearCart,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [address, setAddress] = useState('');
 
   const toggleExpansion = () => {
     setExpanded(!expanded);
   };
 
   const visibleItems = expanded ? cartItems : cartItems.slice(0, 3);
+
+  const placeOrder = async () => {
+    try {
+      const user = auth().currentUser;
+
+      if (!user) {
+        Alert.alert('OOPS 🌝', 'Bạn cần đăng nhập để đặt hàng.');
+        return;
+      }
+
+      const db = firestore();
+      const orderDate = firestore.FieldValue.serverTimestamp();
+
+      const orderData = {
+        userID: user.uid,
+        address: address,
+        menuitem: cartItems.map(item => item.menuItem),
+        itemPrice: cartItems.map(item => item.totalPrice),
+        quantity: cartItems.map(item => item.quantity),
+        totalQuantity,
+        totalPrice,
+        createdAt: orderDate,
+      };
+
+      await db.collection('TblBill').add(orderData);
+
+      onClose();
+      clearCart();
+      Alert.alert('Thành công 🎉', 'Đơn hàng của bạn đã được đặt.');
+    } catch (error) {
+      console.error('Error placing order:', error);
+    }
+  };
+
+  const shippingFee = 20000;
+
+  const grandTotal = totalPrice + shippingFee;
+
+  const [username, setUsername] = useState(null);
+  const [phone, setPhone] = useState(null);
+
+  useEffect(() => {
+    const user = auth().currentUser;
+
+    if (user) {
+      firestore()
+        .collection('TblUsers')
+        .doc(user.uid)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            const userData = documentSnapshot.data();
+            const fetchedUsername = userData.username;
+            setUsername(fetchedUsername);
+            const phone = userData.phone;
+            setPhone(phone);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+    }
+  }, []);
 
   return (
     <Modal
@@ -42,6 +114,12 @@ const CartModal = ({
       onRequestClose={onClose}>
       <View>
         <View style={styles.modalHeader}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={clearCart}
+            style={styles.headerCorner}>
+            <Text style={{fontSize: 16}}>Xoá</Text>
+          </TouchableOpacity>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
             Xác nhận đơn hàng
           </Text>
@@ -51,13 +129,29 @@ const CartModal = ({
             onPress={onClose}
             style={{
               position: 'absolute',
+              paddingTop: 20,
               right: 20,
             }}
           />
         </View>
         <View style={styles.modalContent}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.rowHeader1}>Sản phẩm đã chọn</Text>
+            <Text style={styles.rowHeader}>Địa chỉ giao hàng</Text>
+            <Text>Thông tin người nhận: </Text>
+            <View style={{flexDirection: 'row', paddingVertical: 10}}>
+              <Text style={{marginRight: 20}}>{username}</Text>
+              <Text>{phone}</Text>
+            </View>
+            <Text>Địa chỉ người nhận: </Text>
+            <View style={{paddingVertical: 10}}>
+            <TextInput
+              onChangeText={text => setAddress(text)}
+              value={address}
+              placeholder="Nhập địa chỉ giao hàng"
+            />
+            </View>
+            
+            <Text style={styles.rowHeader}>Sản phẩm đã chọn</Text>
             {visibleItems.map((item, index) => (
               <View key={index} style={styles.cartItem}>
                 <View style={styles.cartList}>
@@ -74,8 +168,7 @@ const CartModal = ({
                       <TouchableOpacity
                         activeOpacity={1}
                         style={styles.updateCartBtn}
-                        // onPress={() => decreaseItemQuantity(item.menuItem)}
-                      >
+                        onPress={() => decreaseItemQuantity(item.menuItem)}>
                         <MaterialCommunityIcons
                           name="minus"
                           size={18}
@@ -86,8 +179,7 @@ const CartModal = ({
                       <TouchableOpacity
                         activeOpacity={1}
                         style={styles.updateCartBtn}
-                        // onPress={() => increaseItemQuantity(item.menuItem, item.totalPrice)}
-                      >
+                        onPress={() => increaseItemQuantity(item.menuItem)}>
                         <MaterialCommunityIcons
                           name="plus"
                           size={18}
@@ -115,6 +207,30 @@ const CartModal = ({
                 )}
               </TouchableOpacity>
             )}
+            <Text style={styles.rowHeader}>Tổng cộng</Text>
+            <View>
+              <View style={styles.summaryRow}>
+                <Text style={{fontSize: 15}}>Thành tiền:</Text>
+                <Text style={{fontSize: 15}}>{formatPrice(totalPrice)}đ</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={{fontSize: 15}}>Phí vận chuyển:</Text>
+                <Text style={{fontSize: 15}}>{formatPrice(shippingFee)}đ</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                  Số tiền thanh toán:
+                </Text>
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                  {formatPrice(grandTotal)}đ
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.rowHeader}>Thanh toán</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <FontAwesome name="money" size={24} color="green" />
+              <Text style={{marginLeft: 10}}>Thanh toán khi nhận hàng</Text>
+            </View>
           </ScrollView>
         </View>
         <View style={styles.bottomBar}>
@@ -126,9 +242,12 @@ const CartModal = ({
                   {totalQuantity} sản phẩm
                 </Text>
               </View>
-              <Text style={styles.bottomPrice}>{formatPrice(totalPrice)}đ</Text>
+              <Text style={styles.bottomPrice}>{formatPrice(grandTotal)}đ</Text>
             </View>
-            <TouchableOpacity activeOpacity={1} style={styles.ordBtn}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.ordBtn}
+              onPress={placeOrder}>
               <Text style={{fontSize: 16, fontWeight: '600'}}>Đặt hàng</Text>
             </TouchableOpacity>
           </View>
@@ -146,8 +265,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: windowHeight * 0.76,
   },
+  headerCorner: {
+    position: 'absolute',
+    paddingTop: 20,
+    left: 20,
+  },
   modalHeader: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
@@ -165,15 +288,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   toggleText: {
-    // color: 'blue',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rowHeader1: {
+  rowHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    paddingVertical: 10,
+    paddingVertical: 15,
+    width: windowWidth * 0.9,
   },
   cartList: {
     justifyContent: 'space-between',
@@ -184,8 +307,6 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.12,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
   bottomLeft: {
     flexDirection: 'row',
@@ -224,5 +345,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10,
   },
 });

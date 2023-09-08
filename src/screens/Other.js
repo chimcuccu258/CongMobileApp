@@ -4,10 +4,23 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {windowHeight, windowWidth} from '../utils/Dimession';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors} from '../assets/colors';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const Other = () => {
   const navigate = useNavigation();
+  const touchLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigate.navigate('Login');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -58,11 +71,10 @@ const Other = () => {
           <Ionicons name="settings-outline" size={20} />
           <Text style={{fontSize: 15, marginLeft: 5}}>Cài đặt</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          activeOpacity={1} 
+        <TouchableOpacity
+          activeOpacity={1}
           style={styles.groupDetailBottom}
-          onPress={() => navigate.navigate('Login')}
-          >
+          onPress={touchLogout}>
           <Ionicons name="log-out-outline" size={20} />
           <Text style={{fontSize: 15, marginLeft: 5}}>Đăng xuất</Text>
         </TouchableOpacity>
