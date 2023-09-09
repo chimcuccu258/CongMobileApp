@@ -26,7 +26,7 @@ const Other = () => {
       <View>
         <Text style={{fontWeight: 'bold', fontSize: 18}}>Tiện ích</Text>
         <View style={styles.row1}>
-          <TouchableOpacity activeOpacity={1} style={styles.card1}>
+          <TouchableOpacity activeOpacity={1} style={styles.card1} onPress={() => navigate.navigate('OrderHistory')}>
             <Ionicons
               name="file-tray-stacked-outline"
               size={26}

@@ -17,6 +17,7 @@ import WeatherIcon from '../components/WeatherIcon';
 import VoucherIcon from '../components/VoucherIcon';
 import NoticeIcon from '../components/NoticeIcon';
 import Points from '../screens/Points';
+import OrderHistory from '../screens/OrderHistory';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -65,17 +66,6 @@ const Tabs = () => {
           headerShown: true,
           headerTitle: 'Danh mục',
           headerTitleAlign: 'left',
-          headerRight: () => (
-            <>
-              <TouchableOpacity onPress={() => navigation.navigate('Favorite')}>
-                <MaterialCommunityIcons
-                  name="heart-outline"
-                  size={26}
-                  style={{marginRight: 10}}
-                />
-              </TouchableOpacity>
-            </>
-          ),
           tabBarLabel: 'Đặt hàng',
         }}
       />
@@ -151,6 +141,11 @@ const MainNavigation = () => {
         name="Points"
         component={Points}
         options={{headerShown: true, title: 'Mã tích điểm'}}
+      />
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistory}
+        options={{headerShown: true, title: 'Lịch sử đơn hàng'}}
       />
     </Stack.Navigator>
   );

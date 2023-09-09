@@ -16,13 +16,14 @@ import {windowHeight, windowWidth} from '../utils/Dimession';
 import {colors} from '../assets/colors';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import formatPrice from './FormatPrice';
 
-const formatPrice = price => {
-  return new Intl.NumberFormat('vi-VN', {
-    currency: 'VND',
-    minimumFractionDigits: 0,
-  }).format(price);
-};
+// const formatPrice = price => {
+//   return new Intl.NumberFormat('vi-VN', {
+//     currency: 'VND',
+//     minimumFractionDigits: 0,
+//   }).format(price);
+// };
 
 const CartModal = ({
   visible,

@@ -1,21 +1,21 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
   Image,
+  TouchableOpacity,
 } from 'react-native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {colors} from '../assets/colors';
-import formatPrice from './FormatPrice';
-import { formatDateTime } from '../utils/DateTime';
-import { windowWidth } from '../utils/Dimession';
+import formatPrice from '../components/FormatPrice';
+import {formatDateTime} from '../utils/DateTime';
+import {windowWidth} from '../utils/Dimession';
 
-const History = () => {
+const OrderHistory = () => {
   const navigation = useNavigation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,14 +32,10 @@ const History = () => {
           .orderBy('createdAt', 'desc')
           .get()
           .then(querySnapshot => {
-            const orderData = [];
-            querySnapshot.forEach(doc => {
-              const data = doc.data();
-              orderData.push(data);
-            });
+            const orderData = querySnapshot.docs.map(doc => doc.data());
             setOrders(orderData);
             setLoading(false);
-          })
+          })          
           .catch(error => {
             console.error('Error fetching order data:', error);
             setLoading(false);
@@ -53,8 +49,6 @@ const History = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Lịch sử đặt hàng</Text>
-
       {!userLoggedIn ? (
         <View style={styles.loginNotice}>
           <Text style={styles.noticeText}>Bạn cần </Text>
@@ -67,7 +61,7 @@ const History = () => {
         <Text style={styles.loadingText}>Loading...</Text>
       ) : orders.length > 0 ? (
         <FlatList
-          data={orders.slice(0, 3)}
+          data={orders}
           keyExtractor={item => `${item.orderId}-${item.createdAt}`}
           renderItem={({item}) => {
             const formattedPrice = formatPrice(item.totalPrice);
@@ -79,17 +73,23 @@ const History = () => {
                     style={styles.image}
                   />
                 </View>
-                <View style={{
-                  width: windowWidth * 0.7,
-                }}>
-                  <Text>{formatDateTime(item.createdAt)}</Text>
-                  <Text style={styles.refText}>{item.address}</Text>
-                  <Text style={styles.refText}>
-                    {item.menuitem && Array.isArray(item.menuitem)
-                      ? item.menuitem.join(', ')
-                      : item.menuitem}
-                  </Text>
-                  <Text style={{fontWeight: 'bold'}}>{formattedPrice}đ</Text>
+                <View style={styles.cardContent}>
+                  <View
+                    style={{
+                      width: windowWidth * 0.5,
+                    }}>
+                    <Text style={styles.refText}>
+                      {item.menuitem && Array.isArray(item.menuitem)
+                        ? item.menuitem.join(', ')
+                        : item.menuitem}
+                    </Text>
+                    <Text style={styles.dateTime}>
+                      {formatDateTime(item.createdAt)}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={{fontWeight: 'bold'}}>{formattedPrice}đ</Text>
+                  </View>
                 </View>
               </View>
             );
@@ -104,7 +104,7 @@ const History = () => {
   );
 };
 
-export default History;
+export default OrderHistory;
 
 const styles = StyleSheet.create({
   title: {
@@ -143,13 +143,33 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.green2,
+    marginBottom: 5,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowOffset: {width: 0, height: 0},
+    shadowColor: 'black',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   refText: {
-    fontSize: 11,
+    fontSize: 14,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  container: {
+    paddingHorizontal: 10,
+    marginTop: 10,
+  },
+  dateTime: {
+    fontSize: 12,
     color: 'gray',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: windowWidth * 0.75,
+    alignItems: 'center',
   },
 });

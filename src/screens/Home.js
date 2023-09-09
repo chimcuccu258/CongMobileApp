@@ -68,11 +68,21 @@ const Home = () => {
           ListEmptyComponent={() => (
             <>
               <History />
+              <View>
+                <Text style={styles.title}>Câu chuyện Cộng</Text>
+              </View>
               <Carousel />
               <Carousel />
               <Carousel />
               <Carousel />
               <Carousel />
+            </>
+          )}
+          ListFooterComponent={() => (
+            <>
+              <View style={{alignItems: 'center', paddingVertical: 10,}}>
+                <Text>From Taos with love {'<3'}</Text>
+              </View>
             </>
           )}
         />
@@ -100,5 +110,11 @@ const styles = StyleSheet.create({
   },
   headerRight: {
     flexDirection: 'row',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
   },
 });
