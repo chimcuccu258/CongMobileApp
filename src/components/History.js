@@ -1,8 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {colors} from '../assets/colors';
 
 const History = () => {
@@ -11,80 +18,79 @@ const History = () => {
   const [loading, setLoading] = useState(true);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const user = auth().currentUser;
+  useFocusEffect(
+    useCallback(() => {
+      const user = auth().currentUser;
 
-    if (user) {
-      setUserLoggedIn(true);
-
-      const fetchOrders = async () => {
-        try {
-          const ordersRef = firestore()
-            .collection('TblBill')
-            .where('uid', '==', user.uid);
-          const querySnapshot = await ordersRef.get();
-
-          if (!querySnapshot.empty) {
-            const userOrders = [];
-            querySnapshot.forEach(documentSnapshot => {
-              const orderData = documentSnapshot.data();
-              userOrders.push(orderData);
+      if (user) {
+        setUserLoggedIn(true);
+        firestore()
+          .collection('TblBill')
+          .orderBy('createdAt', 'desc')
+          .get()
+          .then(querySnapshot => {
+            const orderData = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              const createdAt = new Date(data.createdAt._seconds * 1000);
+              data.createdAt = createdAt.toLocaleString();
+              orderData.push(data);
             });
-            setOrders(userOrders);
-          } else {
-            setOrders([]);
-          }
-        } catch (error) {
-          console.error('Error fetching user orders:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchOrders();
-    } else {
-      setUserLoggedIn(false);
-      setLoading(false);
-    }
-  }, []);
+            setOrders(orderData);
+            setLoading(false);
+          })
+          .catch(error => {
+            console.error('Error fetching order data:', error);
+            setLoading(false);
+          });
+      } else {
+        setUserLoggedIn(false);
+        setLoading(false);
+      }
+    }, []),
+  );
 
   return (
-    <View style={{marginTop: 20}}>
-      <FlatList
-        data={orders}
-        keyExtractor={item => item.orderId}
-        renderItem={({item}) => <View></View>}
-      />
+    <View style={styles.container}>
+      <Text style={styles.title}>Lịch sử đặt hàng</Text>
 
-      <Text style={{fontSize: 16, fontWeight: 'bold', marginTop: 20}}>
-        Bạn có muốn đặt lại đơn
-      </Text>
-      {loading && <Text>Loading...</Text>}
-      {!userLoggedIn && (
-        <View
-          style={{
-            marginTop: 20,
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
+      {!userLoggedIn ? (
+        <View style={styles.loginNotice}>
           <Text style={styles.noticeText}>Bạn cần </Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => navigation.navigate('Login')}>
-            <Text
-              style={[
-                styles.noticeText,
-                {color: colors.green1, fontWeight: 'bold'},
-              ]}>
-              đăng nhập{' '}
-            </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.linkText}>đăng nhập </Text>
           </TouchableOpacity>
           <Text style={styles.noticeText}>để xem lịch sử mua hàng</Text>
         </View>
-      )}
-      {userLoggedIn && orders.length === 0 && (
-        <View style={{marginTop: 20}}>
-          <Text style={styles.noticeText}>Bạn chưa có đơn nào</Text>
+      ) : loading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : orders.length > 0 ? (
+        <FlatList
+          data={orders.slice(0, 3)}
+          keyExtractor={item => `${item.orderId}-${item.createdAt}`}
+          renderItem={({item}) => (
+            <View style={styles.orderItem}>
+              <View style={styles.imageBox}>
+                <Image
+                  source={require('../assets/images/shipping.png')}
+                  style={styles.image}
+                />
+              </View>
+              <View>
+                <Text>{item.createdAt}</Text>
+                <Text style={styles.addressText}>{item.address}</Text>
+                <Text>
+                  {item.menuitem && Array.isArray(item.menuitem)
+                    ? item.menuitem.join(', ')
+                    : item.menuitem}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      ) : (
+        <View style={styles.emptyNotice}>
+          <Text style={styles.emptyText}>Bạn chưa có đơn nào</Text>
         </View>
       )}
     </View>
@@ -94,9 +100,45 @@ const History = () => {
 export default History;
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
+  },
   noticeText: {
     fontSize: 13,
     fontStyle: 'italic',
     alignSelf: 'center',
+  },
+  imageBox: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'white',
+    marginRight: 10,
+    padding: 5,
+  },
+  loginNotice: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  linkText: {
+    fontSize: 13,
+    fontStyle: 'italic',
+    color: colors.green1,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  orderItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.green2,
   },
 });

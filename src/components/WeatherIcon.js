@@ -1,16 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../assets/colors';
 
 const WeatherIcon = () => {
   const [weatherIcon, setWeatherIcon] = useState('weather-sunny');
   const [iconColor, setIconColor] = useState('#FFD700');
-  const navigation = useNavigation();
 
-  useEffect(() => {
+  const fetchWeatherData = () => {
     const apiKey = '48508e72b228a42301c32c30a4881d0f';
     const city = 'Nha Trang';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
@@ -27,7 +24,7 @@ const WeatherIcon = () => {
       .catch(error => {
         console.error('Error fetching weather data:', error);
       });
-  }, []);
+  };
 
   const getWeatherIcon = (weatherId, isNight) => {
     if (isNight) {
@@ -51,7 +48,7 @@ const WeatherIcon = () => {
 
   const getIconColor = (weatherId, isNight) => {
     if (isNight) {
-      return '#000000'; 
+      return '#000000';
     } else if (weatherId >= 200 && weatherId < 600) {
       return '#6495ED';
     } else if (weatherId >= 600 && weatherId < 700) {
@@ -67,6 +64,12 @@ const WeatherIcon = () => {
     const currentTime = new Date().getTime() / 1000;
     return currentTime < sunrise || currentTime > sunset;
   };
+
+  useEffect(() => {
+    fetchWeatherData();
+    const intervalId = setInterval(fetchWeatherData, 30 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <TouchableOpacity activeOpacity={0.5}>
@@ -91,9 +94,5 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    // shadowColor: colors.black,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // elevation: 5,
   },
 });
