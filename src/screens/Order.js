@@ -16,13 +16,6 @@ import menu from '../assets/menu';
 import CartModal from '../components/CartModal';
 import formatPrice from '../components/FormatPrice';
 
-// const formatPrice = price => {
-//   return new Intl.NumberFormat('vi-VN', {
-//     currency: 'VND',
-//     minimumFractionDigits: 0,
-//   }).format(price);
-// };
-
 const Order = () => {
   const [chosenCategory, setChosenCategory] = useState(null);
   const [categoryMap, setCategoryMap] = useState({});

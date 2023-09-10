@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 0},
     shadowColor: 'black',
     shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowRadius: 0,
     elevation: 5,
   },
   refText: {

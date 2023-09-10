@@ -12,8 +12,9 @@ import auth from '@react-native-firebase/auth';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {colors} from '../assets/colors';
 import formatPrice from './FormatPrice';
-import { formatDateTime } from '../utils/DateTime';
-import { windowWidth } from '../utils/Dimession';
+import {formatDateTime} from '../utils/DateTime';
+import {windowWidth} from '../utils/Dimession';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 const History = () => {
   const navigation = useNavigation();
@@ -79,9 +80,10 @@ const History = () => {
                     style={styles.image}
                   />
                 </View>
-                <View style={{
-                  width: windowWidth * 0.7,
-                }}>
+                <View
+                  style={{
+                    width: windowWidth * 0.8,
+                  }}>
                   <Text>{formatDateTime(item.createdAt)}</Text>
                   <Text style={styles.refText}>{item.address}</Text>
                   <Text style={styles.refText}>
@@ -145,11 +147,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.green2,
   },
   refText: {
     fontSize: 11,
     color: 'gray',
+  },
+  reOrder: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colors.green1,
+    borderRadius: 20,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  },
+  reOrderText: {
+    fontSize: 13,
+    marginRight: 5,
+    color: colors.green1,
   },
 });

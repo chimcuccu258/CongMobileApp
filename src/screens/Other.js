@@ -34,14 +34,6 @@ const Other = () => {
             />
             <Text style={{fontWeight: 'bold', marginTop: 10}}>Đặt hàng</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={1} style={styles.card1}>
-            <Ionicons
-              name="document-text-outline"
-              size={26}
-              color={colors.orange}
-            />
-            <Text style={{fontWeight: 'bold', marginTop: 10}}>Điều khoản</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
