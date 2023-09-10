@@ -16,7 +16,7 @@ import {windowHeight, windowWidth} from '../utils/Dimession';
 import {colors} from '../assets/colors';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import formatPrice from './FormatPrice';
+import FormatPrice from '../utils/Price';
 
 const CartModal = ({
   visible,
@@ -183,7 +183,7 @@ const CartModal = ({
                     </View>
                   </View>
                 </View>
-                <Text>{formatPrice(item.totalPrice)}đ</Text>
+                <Text>{FormatPrice(item.totalPrice)}đ</Text>
               </View>
             ))}
             {cartItems.length > 3 && (
@@ -205,18 +205,18 @@ const CartModal = ({
             <View>
               <View style={styles.summaryRow}>
                 <Text style={{fontSize: 15}}>Thành tiền:</Text>
-                <Text style={{fontSize: 15}}>{formatPrice(totalPrice)}đ</Text>
+                <Text style={{fontSize: 15}}>{FormatPrice(totalPrice)}đ</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={{fontSize: 15}}>Phí vận chuyển:</Text>
-                <Text style={{fontSize: 15}}>{formatPrice(shippingFee)}đ</Text>
+                <Text style={{fontSize: 15}}>{FormatPrice(shippingFee)}đ</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>
                   Số tiền thanh toán:
                 </Text>
                 <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                  {formatPrice(grandTotal)}đ
+                  {FormatPrice(grandTotal)}đ
                 </Text>
               </View>
             </View>
@@ -236,7 +236,7 @@ const CartModal = ({
                   {totalQuantity} sản phẩm
                 </Text>
               </View>
-              <Text style={styles.bottomPrice}>{formatPrice(grandTotal)}đ</Text>
+              <Text style={styles.bottomPrice}>{FormatPrice(grandTotal)}đ</Text>
             </View>
             <TouchableOpacity
               activeOpacity={1}

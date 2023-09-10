@@ -7,13 +7,7 @@ import {
   Image,
 } from 'react-native';
 import { colors } from '../assets/colors';
-
-const formatPrice = price => {
-  return new Intl.NumberFormat('vi-VN', {
-    currency: 'VND',
-    minimumFractionDigits: 0,
-  }).format(price);
-};
+import FormatPrice from '../utils/Price';
 
 const CartItem = ({ item, onIncrease, onDecrease, onDelete }) => {
   return (
@@ -41,7 +35,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onDelete }) => {
           </View>
         </View>
       </View>
-      <Text>{formatPrice(item.totalPrice)}đ</Text>
+      <Text>{FormatPrice(item.totalPrice)}đ</Text>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => onDelete(item)}

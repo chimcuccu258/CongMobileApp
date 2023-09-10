@@ -11,10 +11,10 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {colors} from '../assets/colors';
-import formatPrice from './FormatPrice';
 import {formatDateTime} from '../utils/DateTime';
 import {windowWidth} from '../utils/Dimession';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import FormatPrice from '../utils/Price';
 
 const History = () => {
   const navigation = useNavigation();
@@ -71,7 +71,7 @@ const History = () => {
           data={orders.slice(0, 3)}
           keyExtractor={item => `${item.orderId}-${item.createdAt}`}
           renderItem={({item}) => {
-            const formattedPrice = formatPrice(item.totalPrice);
+            const formattedPrice = FormatPrice(item.totalPrice);
             return (
               <View style={styles.orderItem}>
                 <View style={styles.imageBox}>

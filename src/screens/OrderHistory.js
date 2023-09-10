@@ -11,9 +11,9 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {colors} from '../assets/colors';
-import formatPrice from '../components/FormatPrice';
 import {formatDateTime} from '../utils/DateTime';
 import {windowWidth} from '../utils/Dimession';
+import FormatPrice from '../utils/Price';
 
 const OrderHistory = () => {
   const navigation = useNavigation();
@@ -64,7 +64,7 @@ const OrderHistory = () => {
           data={orders}
           keyExtractor={item => `${item.orderId}-${item.createdAt}`}
           renderItem={({item}) => {
-            const formattedPrice = formatPrice(item.totalPrice);
+            const formattedPrice = FormatPrice(item.totalPrice);
             return (
               <View style={styles.orderItem}>
                 <View style={styles.imageBox}>

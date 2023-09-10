@@ -4,18 +4,12 @@ import {windowWidth} from '../utils/Dimession';
 import firestore from '@react-native-firebase/firestore';
 import {colors} from '../assets/colors';
 import menu from '../assets/menu';
+import FormatPrice from '../utils/Price';
 
 const ItemCard = ({id, addToCart}) => {
   const [menuItem, setMenuItem] = useState([]);
   const [price, setPrice] = useState([]);
   const [itemImage, setItemImage] = useState(null);
-
-  const formatPrice = price => {
-    return new Intl.NumberFormat('vi-VN', {
-      currency: 'VND',
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
 
   useEffect(() => {
     const menuData = menu.find(item => item.id === id);
@@ -51,7 +45,7 @@ const ItemCard = ({id, addToCart}) => {
           </View>
           <View>
             <Text style={styles.itemName}>{menuItem}</Text>
-            <Text style={styles.price}>{formatPrice(price)}đ</Text>
+            <Text style={styles.price}>{FormatPrice(price)}đ</Text>
           </View>
         </View>
         <TouchableOpacity

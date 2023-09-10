@@ -14,7 +14,7 @@ import {windowHeight, windowWidth} from '../utils/Dimession';
 import ItemCard from '../components/ItemCard';
 import menu from '../assets/menu';
 import CartModal from '../components/CartModal';
-import formatPrice from '../components/FormatPrice';
+import FormatPrice from '../utils/Price';
 
 const Order = () => {
   const [chosenCategory, setChosenCategory] = useState(null);
@@ -185,7 +185,7 @@ const Order = () => {
               <Text style={styles.quantityText}>{totalQuantity}</Text>
             </View>
             <View style={styles.price}>
-              <Text style={styles.priceText}>{formatPrice(totalPrice)}đ</Text>
+              <Text style={styles.priceText}>{FormatPrice(totalPrice)}đ</Text>
             </View>
           </TouchableOpacity>
         </View>
