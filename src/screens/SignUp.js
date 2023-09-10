@@ -22,7 +22,6 @@ const SignUp = () => {
   };
 
   const handleSignUp = () => {
-    // Implement your sign-up logic here using the formData state.
     console.log('Form Data:', formData);
   };
 
@@ -31,56 +30,48 @@ const SignUp = () => {
       <View style={styles.container}>
         <Text style={styles.title}>Đăng ký</Text>
 
-        {/* Username */}
         <TextInput
           style={styles.input}
           placeholder="Tên đăng nhập"
           onChangeText={(text) => handleChange('username', text)}
         />
 
-        {/* Gender */}
         <TextInput
           style={styles.input}
           placeholder="Giới tính"
           onChangeText={(text) => handleChange('gender', text)}
         />
 
-        {/* Date of Birth */}
         <TextInput
           style={styles.input}
           placeholder="Ngày sinh (dd/mm/yyyy)"
           onChangeText={(text) => handleChange('dateOfBirth', text)}
         />
 
-        {/* Email */}
         <TextInput
           style={styles.input}
           placeholder="Email"
           onChangeText={(text) => handleChange('email', text)}
         />
 
-        {/* Province */}
         <TextInput
           style={styles.input}
           placeholder="Tỉnh/Thành phố"
           onChangeText={(text) => handleChange('province', text)}
         />
 
-        {/* City */}
         <TextInput
           style={styles.input}
           placeholder="Quận/Huyện"
           onChangeText={(text) => handleChange('city', text)}
         />
 
-        {/* Street */}
         <TextInput
           style={styles.input}
           placeholder="Đường/Phố"
           onChangeText={(text) => handleChange('street', text)}
         />
 
-        {/* Sign-up Button */}
         <TouchableOpacity
           style={styles.signupButton}
           onPress={handleSignUp}
