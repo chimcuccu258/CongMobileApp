@@ -61,6 +61,11 @@ const Login = () => {
           onPress={() => navigation.navigate('Tabs')}>
           <Text>Skip</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate('SignUp')}>
+          <Text>SignUp</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

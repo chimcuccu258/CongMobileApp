@@ -18,6 +18,7 @@ import VoucherIcon from '../components/VoucherIcon';
 import NoticeIcon from '../components/NoticeIcon';
 import Points from '../screens/Points';
 import OrderHistory from '../screens/OrderHistory';
+import SignUp from '../screens/SignUp';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -124,6 +125,11 @@ const MainNavigation = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
         options={{headerShown: false}}
       />
       <Stack.Screen name="Authentication" component={Authentication} />
