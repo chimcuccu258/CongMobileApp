@@ -27,15 +27,22 @@ const OrderHistory = () => {
 
       if (user) {
         setUserLoggedIn(true);
+        // console.log(user.phoneNumber)
+        // console.log(user.uid)
         firestore()
           .collection('TblBill')
+          .where('userID', '==', user.uid)
           .orderBy('createdAt', 'desc')
           .get()
           .then(querySnapshot => {
-            const orderData = querySnapshot.docs.map(doc => doc.data());
+            const orderData = [];
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              orderData.push(data);
+            });
             setOrders(orderData);
             setLoading(false);
-          })          
+          })
           .catch(error => {
             console.error('Error fetching order data:', error);
             setLoading(false);
@@ -143,7 +150,7 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     flexDirection: 'row',
-    marginBottom: 5,
+    marginTop: 6,
     padding: 10,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 10,
-    marginTop: 10,
+    flex: 1,
   },
   dateTime: {
     fontSize: 12,

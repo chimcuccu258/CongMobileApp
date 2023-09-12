@@ -74,30 +74,35 @@ const CartModal = ({
 
   const grandTotal = totalPrice + shippingFee;
 
-  const [username, setUsername] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [phone, setPhone] = useState(null);
 
   useEffect(() => {
-    const user = auth().currentUser;
+    const getUserData = async () => {
+      const user = auth().currentUser;
 
-    if (user) {
-      firestore()
-        .collection('TblUsers')
-        .doc(user.uid)
-        .get()
-        .then(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            const userData = documentSnapshot.data();
-            const fetchedUsername = userData.username;
-            setUsername(fetchedUsername);
+      if (user) {
+        try {
+          const querySnapshot = await firestore()
+            .collection('TblUsers')
+            .where('phone', '==', user.phoneNumber)
+            .get();
+
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            setFirstName(userData.firstName);
+            setLastName(userData.lastName);
             const phone = userData.phone;
             setPhone(phone);
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error fetching user data:', error);
-        });
-    }
+        }
+      }
+    };
+
+    getUserData();
   }, []);
 
   return (
@@ -133,18 +138,20 @@ const CartModal = ({
             <Text style={styles.rowHeader}>Địa chỉ giao hàng</Text>
             <Text>Thông tin người nhận: </Text>
             <View style={{flexDirection: 'row', paddingVertical: 10}}>
-              <Text style={{marginRight: 20}}>{username}</Text>
+              <Text style={{marginRight: 20}}>
+                {lastName} {firstName}
+              </Text>
               <Text>{phone}</Text>
             </View>
             <Text>Địa chỉ người nhận: </Text>
             <View style={{paddingVertical: 10}}>
-            <TextInput
-              onChangeText={text => setAddress(text)}
-              value={address}
-              placeholder="Nhập địa chỉ giao hàng"
-            />
+              <TextInput
+                onChangeText={text => setAddress(text)}
+                value={address}
+                placeholder="Nhập địa chỉ giao hàng"
+              />
             </View>
-            
+
             <Text style={styles.rowHeader}>Sản phẩm đã chọn</Text>
             {visibleItems.map((item, index) => (
               <View key={index} style={styles.cartItem}>

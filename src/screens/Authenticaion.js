@@ -18,6 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const Authentication = ({route}) => {
   const navigation = useNavigation();
@@ -33,10 +34,25 @@ const Authentication = ({route}) => {
 
   const confirmCode = async otpValue => {
     try {
-      // console.log(otpValue);
       await confirmation.confirm(otpValue);
-      // console.log(t);
-      navigation.navigate('Tabs');
+
+      async function checkPhoneNumberExists(phoneNumber) {
+        try {
+          const usersRef = firestore().collection('TblUsers');
+          const querySnapshot = await usersRef
+            .where('phone', '==', phoneNumber)
+            .get();
+          if (!querySnapshot.empty) {
+            navigation.navigate('Tabs', {phone: phoneNumber});
+          } else {
+            navigation.navigate('SignUp', {phone: phoneNumber});
+          }
+        } catch (error) {
+          console.error('Error checking phone number:', error);
+        }
+      }
+
+      checkPhoneNumberExists(phone);
     } catch (error) {
       console.log('Invalid code.');
       console.log(otpValue);

@@ -13,9 +13,8 @@ import PhoneInput from 'react-native-phone-number-input';
 import {windowWidth} from '../utils/Dimession';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-import { fonts } from '../assets/fonts';
+import {fonts} from '../assets/fonts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 const Login = () => {
   const navigation = useNavigation();
@@ -61,11 +60,6 @@ const Login = () => {
           onPress={() => navigation.navigate('Tabs')}>
           <Text>Skip</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('SignUp')}>
-          <Text>SignUp</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -108,5 +102,5 @@ const styles = StyleSheet.create({
   loginTitle: {
     fontSize: 16,
     marginTop: 30,
-  }
+  },
 });

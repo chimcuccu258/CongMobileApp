@@ -6,20 +6,19 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const QuickBar = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.box}>
-      <TouchableOpacity 
+      <TouchableOpacity
         activeOpacity={1}
-        onPress={() => navigation.navigate('Points')}
-      >
+        onPress={() => navigation.navigate('Points')}>
         <View style={styles.groupAccess}>
           <View style={styles.roundBox}>
             <MaterialCommunityIcons
@@ -67,7 +66,6 @@ const QuickBar = () => {
           <Text style={styles.text}>Liên hệ</Text>
         </View>
       </TouchableOpacity>
-      
     </View>
   );
 };

@@ -21,6 +21,7 @@ const History = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [phone, setPhone] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -30,6 +31,7 @@ const History = () => {
         setUserLoggedIn(true);
         firestore()
           .collection('TblBill')
+          .where('userID', '==', user.uid)
           .orderBy('createdAt', 'desc')
           .get()
           .then(querySnapshot => {

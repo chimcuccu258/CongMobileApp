@@ -1,81 +1,112 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../assets/colors';
+import React, {useMemo, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {colors} from '../assets/colors';
+import DatePicker from 'react-native-date-picker';
+import {useNavigation} from '@react-navigation/native';
+import RadioGroup from 'react-native-radio-buttons-group';
+import firestore from '@react-native-firebase/firestore';
+import {Picker} from '@react-native-picker/picker';
 
-const SignUp = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    gender: '',
-    dateOfBirth: '',
-    email: '',
-    province: '',
-    city: '',
-    street: '',
-  });
+const SignUp = ({route}) => {
+  const navigation = useNavigation();
 
-  const handleChange = (field, value) => {
-    setFormData({
-      ...formData,
-      [field]: value,
-    });
-  };
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const phone = route?.params?.phone || '';
 
-  const handleSignUp = () => {
-    console.log('Form Data:', formData);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
+  const radioButtons = useMemo(
+    () => [
+      {
+        id: '0',
+        label: 'Nam',
+        value: 'man',
+      },
+      {
+        id: '1',
+        label: 'Nữ',
+        value: 'woman',
+      },
+    ],
+    [],
+  );
+
+  const [gender, setGender] = useState('');
+
+  const handleSignUp = async () => {
+    try {
+      if (!firstName || !lastName || !gender || !email) {
+        console.error('Please fill in all required fields');
+        return;
+      }
+
+      const userData = {
+        lastName,
+        firstName,
+        gender,
+        email,
+        phone,
+      };
+
+      await firestore().collection('TblUsers').add(userData);
+
+      navigation.navigate('Tabs');
+
+      console.log('Sign up successful');
+    } catch (error) {
+      console.error('Error during sign up:', error);
+    }
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <Text style={styles.title}>Đăng ký</Text>
 
         <TextInput
           style={styles.input}
-          placeholder="Tên đăng nhập"
-          onChangeText={(text) => handleChange('username', text)}
+          placeholder="Họ"
+          onChangeText={text => setLastName(text)}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Giới tính"
-          onChangeText={(text) => handleChange('gender', text)}
+          placeholder="Tên"
+          onChangeText={text => setFirstName(text)}
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Ngày sinh (dd/mm/yyyy)"
-          onChangeText={(text) => handleChange('dateOfBirth', text)}
+        <RadioGroup
+          layout="row"
+          radioButtons={radioButtons}
+          onPress={setGender}
+          selectedId={gender}
         />
 
         <TextInput
           style={styles.input}
           placeholder="Email"
-          onChangeText={(text) => handleChange('email', text)}
+          onChangeText={text => setEmail(text)}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Tỉnh/Thành phố"
-          onChangeText={(text) => handleChange('province', text)}
+          placeholder="Số điện thoại"
+          value={phone}
+          editable={false}
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Quận/Huyện"
-          onChangeText={(text) => handleChange('city', text)}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Đường/Phố"
-          onChangeText={(text) => handleChange('street', text)}
-        />
-
-        <TouchableOpacity
-          style={styles.signupButton}
-          onPress={handleSignUp}
-        >
+        <TouchableOpacity style={styles.signupButton} onPress={handleSignUp}>
           <Text style={styles.signupButtonText}>Đăng ký</Text>
         </TouchableOpacity>
       </View>
@@ -94,6 +125,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 30,
     marginTop: 30,
+  },
+  selectedDate: {
+    marginTop: 10,
+    fontSize: 18,
   },
   input: {
     height: 40,

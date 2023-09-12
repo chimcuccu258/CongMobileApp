@@ -1,7 +1,14 @@
-import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React, { useState } from 'react';
-import { windowWidth } from '../utils/Dimession';
-import { colors } from '../assets/colors';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+import React, {useState} from 'react';
+import {windowWidth} from '../utils/Dimession';
+import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Store = () => {
@@ -19,12 +26,12 @@ const Store = () => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
         <View style={styles.searchBar}>
-          <MaterialCommunityIcons name='magnify' size={26} />
+          <MaterialCommunityIcons name="magnify" size={26} />
           <TextInput
             style={styles.searchInput}
-            placeholder='Tìm kiếm'
+            placeholder="Tìm kiếm"
             placeholderTextColor={colors.gray}
-            onChangeText={(text) => setSearchText(text)}
+            onChangeText={text => setSearchText(text)}
             onSubmitEditing={handleSearch}
           />
         </View>

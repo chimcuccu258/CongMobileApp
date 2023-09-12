@@ -14,7 +14,7 @@ const menu = [
   {
     id: 'f8an2cJI9SV6wywrCwLn',
     image: require('../assets/images/menu/menu_3.jpg'),
-    categoryID: 'EdoOaDDB6arG70zA9TEl',    
+    categoryID: 'EdoOaDDB6arG70zA9TEl',
   },
   {
     id: 'OCwoW9RvGf4A50e6RirE',
@@ -46,7 +46,7 @@ const menu = [
     image: require('../assets/images/menu/menu_9.jpg'),
     categoryID: 'EdoOaDDB6arG70zA9TEl',
   },
-  //Sinh to 
+  //Sinh to
   {
     id: '4rjjiQNIjQUoBdG3Mb4H',
     image: require('../assets/images/menu/menu_10.png'),

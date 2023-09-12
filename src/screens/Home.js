@@ -13,34 +13,35 @@ import QuickBar from '../components/QuickBar';
 import History from '../components/History';
 import {windowHeight} from '../utils/Dimession';
 
-const Home = () => {
+const Home = ({route}) => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const phone = route?.params?.phone || '';
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   useEffect(() => {
-    const user = auth().currentUser;
+    const getUserData = async () => {
+      const user = auth().currentUser;
 
-    if (user) {
-      firestore()
-        .collection('TblUsers')
-        .doc(user.uid)
-        .get()
-        .then(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            const userData = documentSnapshot.data();
-            const fetchedUsername = userData.username;
-            setUsername(fetchedUsername);
+      if (user) {
+        try {
+          const querySnapshot = await firestore()
+            .collection('TblUsers')
+            .where('phone', '==', user.phoneNumber)
+            .get();
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            setFirstName(userData.firstName);
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error fetching user data:', error);
-        });
-    } else {
-      setUsername(null);
-    }
+        }
+      }
+    };
+    getUserData();
   }, []);
 
-  const greetingMessage = username ? `Chào, ${username}` : 'Chào bạn';
+  const greetingMessage = firstName ? `Chào, ${firstName}` : 'Chào bạn';
 
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
@@ -67,21 +68,18 @@ const Home = () => {
           )}
           ListEmptyComponent={() => (
             <>
-              <History />
+              <History phone={phone} />
               <View>
                 <Text style={styles.title}>Câu chuyện Cộng</Text>
               </View>
-              <Carousel />
-              <Carousel />
-              <Carousel />
               <Carousel />
               <Carousel />
             </>
           )}
           ListFooterComponent={() => (
             <>
-              <View style={{alignItems: 'center', paddingVertical: 10,}}>
-                <Text>From Taos with love {'<3'}</Text>
+              <View style={{alignItems: 'center', paddingVertical: 10}}>
+                <Text>hihi</Text>
               </View>
             </>
           )}

@@ -19,6 +19,7 @@ import NoticeIcon from '../components/NoticeIcon';
 import Points from '../screens/Points';
 import OrderHistory from '../screens/OrderHistory';
 import SignUp from '../screens/SignUp';
+import Information from '../screens/Information';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -152,6 +153,11 @@ const MainNavigation = () => {
         name="OrderHistory"
         component={OrderHistory}
         options={{headerShown: true, title: 'Lịch sử đơn hàng'}}
+      />
+      <Stack.Screen
+        name="Info"
+        component={Information}
+        options={{headerShown: true, title: 'Cập nhật thông tin'}}
       />
     </Stack.Navigator>
   );

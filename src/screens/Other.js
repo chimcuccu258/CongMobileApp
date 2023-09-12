@@ -26,7 +26,10 @@ const Other = () => {
       <View>
         <Text style={{fontWeight: 'bold', fontSize: 18}}>Tiện ích</Text>
         <View style={styles.row1}>
-          <TouchableOpacity activeOpacity={1} style={styles.card1} onPress={() => navigate.navigate('OrderHistory')}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.card1}
+            onPress={() => navigate.navigate('OrderHistory')}>
             <Ionicons
               name="file-tray-stacked-outline"
               size={26}
@@ -55,7 +58,10 @@ const Other = () => {
         <Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 10}}>
           Tài khoản
         </Text>
-        <TouchableOpacity activeOpacity={1} style={styles.groupDetailTop}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.groupDetailTop}
+          onPress={() => navigate.navigate('Info')}>
           <Ionicons name="person-outline" size={20} />
           <Text style={{fontSize: 15, marginLeft: 5}}>Thông tin cá nhân</Text>
         </TouchableOpacity>

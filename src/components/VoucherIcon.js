@@ -9,7 +9,9 @@ const VoucherIcon = () => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Tab4')}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={() => navigation.navigate('Tab4')}>
       <View style={styles.voucherBox}>
         <MaterialCommunityIcons
           name="ticket-confirmation-outline"

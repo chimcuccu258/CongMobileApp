@@ -1,35 +1,27 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from 'react-native';
-import { colors } from '../assets/colors';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {colors} from '../assets/colors';
 import FormatPrice from '../utils/Price';
 
-const CartItem = ({ item, onIncrease, onDecrease, onDelete }) => {
+const CartItem = ({item, onIncrease, onDecrease, onDelete}) => {
   return (
     <View key={item.menuItem} style={styles.cartItem}>
       <View style={styles.cartList}>
         <Image source={item.image} style={styles.itemImage} />
-        <View style={{ justifyContent: 'space-between' }}>
-          <Text style={{ fontWeight: 'bold' }}>{item.menuItem}</Text>
+        <View style={{justifyContent: 'space-between'}}>
+          <Text style={{fontWeight: 'bold'}}>{item.menuItem}</Text>
           <View style={styles.quantityControls}>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => onDecrease(item)}
-              style={styles.quantityButton}
-            >
+              style={styles.quantityButton}>
               <Text style={styles.quantityButtonText}>-</Text>
             </TouchableOpacity>
             <Text style={styles.quantityText}>{item.quantity}</Text>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => onIncrease(item)}
-              style={styles.quantityButton}
-            >
+              style={styles.quantityButton}>
               <Text style={styles.quantityButtonText}>+</Text>
             </TouchableOpacity>
           </View>
@@ -39,8 +31,7 @@ const CartItem = ({ item, onIncrease, onDecrease, onDelete }) => {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => onDelete(item)}
-        style={styles.deleteButton}
-      >
+        style={styles.deleteButton}>
         <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
     </View>

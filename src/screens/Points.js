@@ -7,36 +7,44 @@ import firestore from '@react-native-firebase/firestore';
 
 const Points = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [phone, setPhone] = useState(null);
 
   useEffect(() => {
-    const user = auth().currentUser;
+    const getUserData = async () => {
+      const user = auth().currentUser;
 
-    if (user) {
-      firestore()
-        .collection('TblUsers')
-        .doc(user.uid)
-        .get()
-        .then(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            const userData = documentSnapshot.data();
-            const fetchedUsername = userData.username;
-            setUsername(fetchedUsername);
+      if (user) {
+        try {
+          const querySnapshot = await firestore()
+            .collection('TblUsers')
+            .where('phone', '==', user.phoneNumber)
+            .get();
+
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            setFirstName(userData.firstName);
+            setLastName(userData.lastName);
+            const phone = userData.phone;
+            setPhone(phone);
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error fetching user data:', error);
-        });
-    } else {
-      setUsername(null);
-    }
+        }
+      }
+    };
+
+    getUserData();
   }, []);
+
+  const fullName = lastName + ' ' + firstName;
 
   return (
     <View style={styles.container}>
       <View style={styles.pointCard}>
         <Text style={{fontSize: 16, fontWeight: 'bold'}}>{`${
-          username || 'Khách'
+          fullName || 'Khách'
         }`}</Text>
       </View>
     </View>

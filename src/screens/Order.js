@@ -115,7 +115,7 @@ const Order = () => {
   const totalPrice = cart.reduce((sum, item) => sum + item.totalPrice, 0);
 
   const clearCart = () => {
-    setCart([]); 
+    setCart([]);
     setShowCart(false);
     setIsCartVisible(false);
   };
