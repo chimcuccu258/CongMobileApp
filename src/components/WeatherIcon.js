@@ -8,7 +8,7 @@ const WeatherIcon = () => {
   const [iconColor, setIconColor] = useState('#FFD700');
 
   const fetchWeatherData = () => {
-    const apiKey = '48508e72b228a42301c32c30a4881d0f';
+    const apiKey = 'aaa';
     const city = 'Nha Trang';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
